@@ -16,11 +16,12 @@ func init() {
 }
 
 func main() {
-	producer := kafka.NewKafkaProducer()
-	kafka.Publish(msg: "olá", topic: "readtest", producer)
+	msgChan := make(chan *ckafka.Message)
+	consumer := kafka.NewKafkaConsumer(msgChan)
+	go consumer.Consume()
 
-	for {
-		_ = 1
+	for msg := range msgChan {
+		fmt.Println(stinrg(msg.Value))
 	}
 
 	// localRoute := route.Route{
