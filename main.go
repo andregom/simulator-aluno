@@ -2,16 +2,18 @@ package main
 
 import (
 	"fmt"
-	"application/route"
+	// "application/route"
 	"log"
+	kafka "infra/kafka"
 
-	"github.com/joho/godotenv"
+	gototenv "github.com/joho/godotenv"
+	ckafka "github.com/confluentinc/confluent-kafka-go/kafka"
 )
 
 func init() {
 	err := gototenv.Load()
 	if err != nil {
-		log.Fatal(v...: "error laoding .env file")
+		log.Fatal("error laoding .env file")
 	}
 }
 
@@ -21,7 +23,7 @@ func main() {
 	go consumer.Consume()
 
 	for msg := range msgChan {
-		fmt.Println(stinrg(msg.Value))
+		fmt.Println(string(msg.Value))
 	}
 
 	// localRoute := route.Route{
