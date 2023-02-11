@@ -5,6 +5,7 @@ import (
 	// "application/route"
 	"log"
 	kafka "infra/kafka"
+	kafka2 "application/kafka"
 
 	gototenv "github.com/joho/godotenv"
 	ckafka "github.com/confluentinc/confluent-kafka-go/kafka"
@@ -24,6 +25,7 @@ func main() {
 
 	for msg := range msgChan {
 		fmt.Println(string(msg.Value))
+		go kafka2.Produce(msg)
 	}
 
 	// localRoute := route.Route{
