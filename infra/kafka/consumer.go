@@ -1,7 +1,11 @@
-import ckafka "github.com/confluentinc/qconfluent-kafka-go/qkafka"
+package kafka
+
+import ckafka "github.com/confluentinc/confluent-kafka-go/v2/kafka"
 
 import (
 	"fmt"
+	"os"
+	"log"
 )
 
 type KafkaConsumer struct {
@@ -9,25 +13,25 @@ type KafkaConsumer struct {
 }
 
 func NewKafkaConsumer(msgChan chan * ckafka.Message) * KafkaConsumer {
-	return {
+	return &KafkaConsumer{
 		MsgChan: msgChan,
 	}
 }
 
 func(k *KafkaConsumer) Consume() {
-	configMap := &ckafka.configMap{
-		"bootstrap.servers": os.Getenv(key: "KafkaBootstrapServers"),
-		"group.id": os.Getenv(key: "KafkaConsumerGroupId"),
+	configMap := &ckafka.ConfigMap{
+		"bootstrap.servers": os.Getenv("KafkaBootstrapServers"),
+		"group.id": os.Getenv("KafkaConsumerGroupId"),
 	}
 	c, err := ckafka.NewConsumer(configMap)
 	if err != nil {
 		log.Fatalf("error consuming kfafka message:" + err.Error())
 	}
-	topics := []string{os.Getenv(key: "KafkaREadTopic")}
-	c.SubscribeTopics(topics, rebalanceCB:nil)
-	fmt.Println(a...: "Kafka consumer has benn started")
+	topics := []string{os.Getenv("KafkaREadTopic")}
+	c.SubscribeTopics(topics, nil)
+	fmt.Println("Kafka consumer has benn started")
 	for {
-		msg, err := c.ReadMessage(timeout: -1)
+		msg, err := c.ReadMessage(-1)
 		if err == nil {
 			k.MsgChan <- msg
 		}

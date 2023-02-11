@@ -1,23 +1,24 @@
 package main
 
 import (
-	"fmt"
-	"application/route"
+	// "fmt"
+	// "application/route"
+	"infra/kafka"
 	"log"
 
-	"github.com/joho/godotenv"
+	gototenv "github.com/joho/godotenv"
 )
 
 func init() {
 	err := gototenv.Load()
 	if err != nil {
-		log.Fatal(v...: "error laoding .env file")
+		log.Fatal("error laoding .env file")
 	}
 }
 
 func main() {
 	producer := kafka.NewKafkaProducer()
-	kafka.Publish(msg: "olá", topic: "readtest", producer)
+	kafka.Publish("ola", "readtest", producer)
 
 	for {
 		_ = 1
