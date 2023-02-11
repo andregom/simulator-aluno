@@ -10,21 +10,23 @@ import (
 )
 
 type Route struct {
-	ID        string     `json:routeID`
-	ClientID  string     `json:clientID`
-	Positions []Position `json:positions`
+	ID        string `json:"routeId"`
+	ClientID  string `json:"clientId"`
+	Positions []Position `json:"position"`
 }
 
+// Position is a type which contains the lat and long
 type Position struct {
-	Lat  float64 `json:lat`
-	Long float64 `json:lon`
+	Lat  float64 `json:"lat"`
+	Long float64 `json:"long"`
 }
 
+// PartialRoutePosition is the actual response which the system will return
 type PartialRoutePosition struct {
-	ID       string    `json:routeId`
-	ClientID string    `json:clientId`
-	Position []float64 `json:position`
-	Finished bool      `json:finished`
+	ID       string    `json:"routeId"`
+	ClientID string    `json:"clientId"`
+	Position []float64 `json:"position"`
+	Finished bool      `json:"finished"`
 }
 
 func NewRoute() *Route {
@@ -40,9 +42,7 @@ func (r *Route) LoadPositions() error {
 		return err
 	}
 	defer f.Close()
-
 	scanner := bufio.NewScanner(f)
-
 	for scanner.Scan() {
 		data := strings.Split(scanner.Text(), ",")
 		lat, err := strconv.ParseFloat(data[0], 64)
@@ -65,7 +65,6 @@ func (r *Route) ExportJsonPositions() ([]string, error) {
 	var route PartialRoutePosition
 	var result []string
 	total := len(r.Positions)
-
 	for k, v := range r.Positions {
 		route.ID = r.ID
 		route.ClientID = r.ClientID

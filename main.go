@@ -27,14 +27,4 @@ func main() {
 		fmt.Println(string(msg.Value))
 		go kafka2.Produce(msg)
 	}
-
-	// localRoute := route.Route{
-	// 	ID:       "1",
-	// 	ClientID: "1",
-	// }
-
-	// localRoute.LoadPositions()
-	// stringjson, _ := localRoute.ExportJsonPasitions()
-
-	// fmt.Println(stringjson[0])
 }
