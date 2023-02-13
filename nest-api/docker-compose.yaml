@@ -2,13 +2,38 @@ version: '3'
 
 services:
 
-  app:
-    build: .
-    entrypoint: ./.docker/entrypoint.sh
-    ports:
-      - 3000:3000
+  # app:
+  #   build: .
+  #   entrypoint: ./.docker/entrypoint.sh
+  #   ports:
+  #     - 3000:3000
+  #   volumes:
+  #     - .:/home/node/app
+  #   depends_on:
+  #     - db
+  #   tty: true
+
+  db:
+    image: mongo:4.4.4
+    restart: always
     volumes:
-      - .:/home/node/app
+      - ./.docker/dbdata:/data/db
+      - ./.docker/mongo:/docker-entrypoint-initdb.data
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME=root
+      - MONGO_INITDB_ROOT_PASSWORD=root
+      - MONGO_INITDB_DATABASE=nest
 
-    tty: true
-
+  mongo-express:
+      image: mongo-express:0.54.0
+      restart: always
+      ports:
+        - 8081:8081
+      environment:
+        - ME_CONFIG_MONGODB_SERVER=db
+        - ME_CONFIG_MONGODB_AUTH_USERNAME=root
+        - ME_CONFIG_MONGODB_AUTH_PASSWORD=root
+        - ME_CONFIG_MONGODB_ADMINUSERNAME=root
+        - ME_CONFIG_MONGODB_ADMINPASSWORD=root
+      depends_on:
+        - db
